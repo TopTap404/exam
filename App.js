@@ -23,18 +23,25 @@ const HomeScreen = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(API_URL)
-      .then((response) => response.json())
-      .then((data) => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(API_URL);
+        const data = await response.json();
+  
         const formattedData = data.hourly.time.map((time, index) => ({
           time,
           temperature: data.hourly.temperature_2m[index],
           weatherCode: data.hourly.weathercode[index],
         }));
+  
         setWeatherData(formattedData);
         setLoading(false);
-      })
-      .catch((error) => console.error(error));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+  
+    fetchData();
   }, []);
 
   // ฟังก์ชันเมื่อกดปุ่ม
